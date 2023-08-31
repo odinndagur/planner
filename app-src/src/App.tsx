@@ -48,8 +48,8 @@ function Image({ img, index }: { img: string; index: number }) {
 					<img
 						src={img}
 						style={{
-							maxWidth: '100%',
-							maxHeight: '80vh',
+							maxWidth: '80vmin',
+							maxHeight: '80vmin',
 							paddingTop: imgPadding,
 							paddingBottom: imgPadding,
 							textAlign: 'center',
