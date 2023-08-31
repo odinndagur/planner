@@ -1,116 +1,113 @@
-
-
 import img1 from './assets/IMG_3075_1.jpg'
 import img2 from './assets/IMG_5719.jpg'
 import img3 from './assets/IMG_6101.jpg'
 import { QuoteApp } from './x'
 
-import React, { useState } from "react";
-import styled from "@emotion/styled";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useState } from 'react'
+import styled from '@emotion/styled'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { StrictModeDroppable } from './StrictModeDroppable'
 
-const initial = Array.from({ length: 10 }, (v, k) => k).map(k => {
-  const custom: any = {
-    id: `id-${k}`,
-    content: `Quote ${k}`
-  };
+const initial = Array.from({ length: 10 }, (v, k) => k).map((k) => {
+	const custom: any = {
+		id: `id-${k}`,
+		content: `Quote ${k}`,
+	}
 
-  return custom;
-});
+	return custom
+})
 
-const grid = 8;
+const grid = 8
 const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+	const result = Array.from(list)
+	const [removed] = result.splice(startIndex, 1)
+	result.splice(endIndex, 0, removed)
 
-  return result;
-};
+	return result
+}
 
 const QuoteItem = styled.div`
-  width: 200px;
-  border: 1px solid grey;
-  margin-bottom: ${grid}px;
-  background-color: lightblue;
-  padding: ${grid}px;
-`;
+	width: 200px;
+	border: 1px solid grey;
+	margin-bottom: ${grid}px;
+	background-color: lightblue;
+	padding: ${grid}px;
+`
 
-function Image({ img, index }) {
-    const imgPadding = '0.5rem'
+function Image({ img, index }: { img: string; index: number }) {
+	const imgPadding = '0.5rem'
 
-  return (
-    <Draggable draggableId={img} index={index}>
-      {provided => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <img src={img} style={{maxWidth:'100%',maxHeight:'80vh',paddingTop:imgPadding,paddingBottom:imgPadding,textAlign:'center',margin:'auto'}}/>
-        </div>
-      )}
-    </Draggable>
-  );
+	return (
+		<Draggable draggableId={img} index={index}>
+			{(provided) => (
+				<div
+					ref={provided.innerRef}
+					{...provided.draggableProps}
+					{...provided.dragHandleProps}
+				>
+					<img
+						src={img}
+						style={{
+							maxWidth: '100%',
+							maxHeight: '80vh',
+							paddingTop: imgPadding,
+							paddingBottom: imgPadding,
+							textAlign: 'center',
+							margin: 'auto',
+						}}
+					/>
+				</div>
+			)}
+		</Draggable>
+	)
 }
 
-
-const ImageList = React.memo(function ImageList({ images }) {
-  return images.map((img:string,index:number) => {
-    return <Image img={img} index={index} key={img}/>
-  // })}
-})})
+const ImageList = React.memo(function ImageList({ images }:{images:string[]}) {
+	return images.map((img: string, index: number) => {
+		return <Image img={img} index={index} key={img} />
+		// })}
+	})
+})
 
 function App() {
-  const [state, setState] = useState({ images: [img1,img2,img3] });
+	const [images, setImages] = useState([img1, img2, img3])
 
-  function onDragEnd(result) {
-    if (!result.destination) {
-      return;
-    }
+	function onDragEnd(result) {
+		if (!result.destination) {
+			return
+		}
 
-    if (result.destination.index === result.source.index) {
-      return;
-    }
+		if (result.destination.index === result.source.index) {
+			return
+		}
 
-    const images = reorder(
-      state.images,
-      result.source.index,
-      result.destination.index
-    );
+		const newOrderImages = reorder(
+			images,
+			result.source.index,
+			result.destination.index
+		)
 
-    setState({ images });
-  }
+		setImages(newOrderImages)
+	}
 
-  return (
-    <div style={{margin:'auto',maxWidth:'600px'}}>
-
-      <DragDropContext onDragEnd={onDragEnd}>
-        <StrictModeDroppable droppableId="list">
-          {provided => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {/* <QuoteList quotes={state.quotes} /> */}
-              <ImageList images={state.images} />
-              {provided.placeholder}
-            </div>
-          )}
-        </StrictModeDroppable>
-      </DragDropContext>
-    </div>
-    );
+	return (
+		<div style={{ margin: 'auto', maxWidth: '600px' }}>
+			<DragDropContext onDragEnd={onDragEnd}>
+				<StrictModeDroppable droppableId='list'>
+					{(provided) => (
+						<div ref={provided.innerRef} {...provided.droppableProps}>
+							{/* <QuoteList quotes={state.quotes} /> */}
+							<ImageList images={images} />
+							{provided.placeholder}
+						</div>
+					)}
+				</StrictModeDroppable>
+			</DragDropContext>
+		</div>
+	)
 }
 
-
-
-
-
-
 export default App
-
-
-
-
-
 
 // import { useState } from 'react'
 
